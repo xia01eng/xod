@@ -33,6 +33,7 @@ class App extends client.App {
     this.onUpload = this.onUpload.bind(this);
     this.onShowCodeArduino = this.onShowCodeArduino.bind(this);
     this.onImportChange = this.onImportChange.bind(this);
+    this.onOpenTutorial = this.onOpenTutorial.bind(this);
     this.onImport = this.onImport.bind(this);
     this.onExport = this.onExport.bind(this);
     this.onCloseApp = this.onCloseApp.bind(this);
@@ -77,6 +78,12 @@ class App extends client.App {
     };
 
     reader.readAsText(file);
+  }
+
+  onOpenTutorial() {
+    if (!this.confirmUnsavedChanges()) return;
+
+    this.props.actions.openProject(this.props.tutorialProject);
   }
 
   onKeyDown(event) {  // eslint-disable-line class-methods-use-this
@@ -181,6 +188,7 @@ class App extends client.App {
           onClick(items.renameProject, this.props.actions.requestRenameProject),
           items.separator,
           importProject,
+          onClick(items.openTutorialProject, this.onOpenTutorial),
           onClick(items.exportProject, this.onExport),
           items.separator,
           onClick(items.newPatch, this.props.actions.createPatch),
@@ -237,6 +245,7 @@ class App extends client.App {
             label: `Version: ${packageJson.version}`,
           },
           items.separator,
+          onClick(items.openTutorialProject, this.onOpenTutorial),
           link(items.documentation, { href: client.getUtmSiteUrl('/docs/', 'docs', 'menu') }),
           link(items.shortcuts, { href: client.getUtmSiteUrl('/docs/reference/shortcuts/', 'docs', 'menu') }),
           link(items.forum, { href: client.getUtmForumUrl('menu') }),
