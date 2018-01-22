@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import PropTypes from 'prop-types';
+import urlParse from 'url-parse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import EventListener from 'react-event-listener';
@@ -46,6 +47,30 @@ class App extends client.App {
       [client.COMMAND.NEW_PROJECT]: this.onRequestCreateProject,
       [client.COMMAND.RENAME_PROJECT]: this.props.actions.requestRenameProject,
     };
+
+    this.urlActions = {
+      '/open-tutorial': this.onOpenTutorial,
+    };
+
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.tagName === 'A' && e.target.protocol === 'xod:') {
+        const url = urlParse(e.target.href, true);
+
+        if (url.hostname !== 'actions') return;
+
+        e.preventDefault();
+
+        const actionName = url.pathname;
+        const params = url.query;
+        const action = this.urlActions[actionName];
+
+        if (action) {
+          action(params);
+        } else {
+          this.props.actions.addError({ title: 'Invalid action name' });
+        }
+      }
+    });
 
     props.actions.openProject(props.tutorialProject);
     props.actions.fetchGrant();
