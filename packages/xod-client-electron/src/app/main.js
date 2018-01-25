@@ -5,6 +5,8 @@ import contextMenu from 'electron-context-menu';
 import { URL } from 'url';
 import * as R from 'ramda';
 
+import { URL_ACTION_PROTOCOL, URL_ACTION_PREFIX } from 'xod-client/dist/core/urlActions';
+
 import * as EVENTS from '../shared/events';
 import {
   listBoardsHandler,
@@ -83,7 +85,7 @@ function createWindow() {
     if (href !== webContents.getURL()) {
       e.preventDefault();
       const url = new URL(href);
-      if (url.protocol === 'xod:' && url.hostname === 'actions') {
+      if (url.protocol === URL_ACTION_PROTOCOL && url.hostname === URL_ACTION_PREFIX) {
         win.webContents.send(
           EVENTS.XOD_URL_CLICKED,
           {

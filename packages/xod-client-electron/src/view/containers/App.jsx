@@ -150,7 +150,7 @@ class App extends client.App {
 
     this.urlActions = {
       // actionPathName: params => this.props.actions.someAction(params.foo, params.bar),
-      '/open-tutorial': this.onOpenTutorialProject,
+      [client.URL_ACTION_TYPES.OPEN_TUTORIAL]: this.onOpenTutorialProject,
     };
     ipcRenderer.on(
       EVENTS.XOD_URL_CLICKED,

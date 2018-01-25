@@ -49,14 +49,18 @@ class App extends client.App {
     };
 
     this.urlActions = {
-      '/open-tutorial': this.onOpenTutorial,
+      [client.URL_ACTION_TYPES.OPEN_TUTORIAL]: this.onOpenTutorial,
     };
 
     document.addEventListener('click', (e) => {
-      if (e.target && e.target.tagName === 'A' && e.target.protocol === 'xod:') {
+      if (R.allPass([
+        R.complement(R.isNil),
+        R.propEq('tagName', 'A'),
+        R.propEq('protocol', client.URL_ACTION_PROTOCOL),
+      ])(e.target)) {
         const url = urlParse(e.target.href, true);
 
-        if (url.hostname !== 'actions') return;
+        if (url.hostname !== client.URL_ACTION_PREFIX) return;
 
         e.preventDefault();
 
